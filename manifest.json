@@ -1,0 +1,28 @@
+{
+  "name": "PetPrinted ChatGPT Assistant",
+  "author": {
+    "name": "Nikolay",
+    "email": "nikolay@bytexperts.de"
+  },
+  "defaultLocale": "de",
+  "private": true,
+  "location": {
+    "support": {
+      "ticket_sidebar": {
+        "url": "assets/chatgpt.html",
+        "size": {
+          "height": "500px",
+          "width": "400px"
+        },
+        "flexible": true
+      }
+    }
+  },
+  "version": "1.0.0",
+  "frameworkVersion": "2.0",
+  "icon": {
+    "small": "assets/icon.png",
+    "medium": "assets/icon.png",
+    "large": "assets/icon.png"
+  }
+}

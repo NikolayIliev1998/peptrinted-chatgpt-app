@@ -1,0 +1,23 @@
+{
+  "name": "petprinted-chatgpt-app",
+  "version": "1.0.0",
+  "description": "ChatGPT Assistant for PetPrinted Zendesk Integration",
+  "main": "assets/server.mjs",
+  "scripts": {
+    "start": "node assets/server.mjs",
+    "dev": "concurrently \"node assets/server.mjs\" \"npx @zendesk/zcli apps:server\"",
+    "build": "echo 'No build step required'",
+    "test": "echo 'No tests specified'"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
+    "express": "^4.21.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  },
+  "keywords": ["zendesk", "chatgpt", "customer-service"],
+  "author": "Nikolay",
+  "license": "MIT"
+}
