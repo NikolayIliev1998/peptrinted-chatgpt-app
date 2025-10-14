@@ -24,5 +24,9 @@
     "small": "assets/icon.png",
     "medium": "assets/icon.png",
     "large": "assets/icon.png"
+  },
+  "translations": {
+    "de": "translations/de.json",
+    "en": "translations/en.json"
   }
 }

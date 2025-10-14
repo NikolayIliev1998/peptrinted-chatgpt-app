@@ -1,0 +1,30 @@
+{
+  "app": {
+    "name": "PetPrinted ChatGPT Assistant",
+    "description": "ChatGPT Assistant für PetPrinted Zendesk Integration"
+  },
+  "ui": {
+    "title": "ChatGPT Assistant",
+    "placeholder": "Geben Sie Ihre Nachricht an ChatGPT ein...",
+    "send": "Senden",
+    "clear": "Chat leeren",
+    "quick_prompts": "Schnelle Prompts:",
+    "professional_response": "Professionelle Antwort",
+    "problem_analysis": "Problem-Analyse",
+    "delay_explanation": "Verzögerung erklären",
+    "apology": "Entschuldigung",
+    "customer_support": "Kundenunterstützung",
+    "thinking": "ChatGPT denkt nach...",
+    "connected": "✅ Verbunden",
+    "disconnected": "❌ Nicht verbunden",
+    "checking_connection": "Verbindung wird geprüft...",
+    "welcome_message": "Hallo! Ich bin Ihr ChatGPT Assistant für PetPrinted. Wie kann ich Ihnen heute helfen?"
+  },
+  "errors": {
+    "connection_error": "Fehler bei der Verbindung",
+    "unknown_error": "Unbekannter Fehler",
+    "api_key_error": "OpenAI API-Schlüssel ist ungültig oder nicht konfiguriert",
+    "rate_limit_error": "Zu viele Anfragen an ChatGPT. Bitte versuchen Sie es später erneut",
+    "chatgpt_error": "ChatGPT Fehler"
+  }
+}

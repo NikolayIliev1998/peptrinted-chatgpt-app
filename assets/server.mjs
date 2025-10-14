@@ -9,7 +9,30 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001; // Use Render's PORT or default to 3001
 
-app.use(cors());
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow Zendesk domains
+    if (origin.match(/^https:\/\/.*\.apps\.zdusercontent\.com$/) ||
+        origin.match(/^https:\/\/.*\.zendesk\.com$/) ||
+        origin === 'http://localhost:3001' ||
+        origin === 'http://localhost:3000') {
+      return callback(null, true);
+    }
+    
+    // For development, allow any localhost
+    if (process.env.NODE_ENV !== 'production' && origin.match(/^http:\/\/localhost/)) {
+      return callback(null, true);
+    }
+    
+    callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(express.json());
 
 // Test endpoint to verify server is running

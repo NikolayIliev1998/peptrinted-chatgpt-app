@@ -208,7 +208,7 @@
   <script>
     const localURL = "http://localhost:3001";
     const liveURL = "https://petprinted-chatgpt-app.onrender.com"; // Render deployment URL
-    const serverURL = window.location.hostname === 'localhost' ? localURL : liveURL;
+    const serverURL = liveURL;
 
     const client = ZAFClient.init();
     let chatgptMessages = [];
