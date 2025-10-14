@@ -9,34 +9,54 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3001; // Use Render's PORT or default to 3001
 
+// More permissive CORS configuration for Zendesk
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    // Allow Zendesk domains
+    // Allow all Zendesk domains
     if (origin.match(/^https:\/\/.*\.apps\.zdusercontent\.com$/) ||
         origin.match(/^https:\/\/.*\.zendesk\.com$/) ||
-        origin === 'http://localhost:3001' ||
-        origin === 'http://localhost:3000') {
+        origin.match(/^https:\/\/.*\.zdusercontent\.com$/)) {
       return callback(null, true);
     }
     
-    // For development, allow any localhost
-    if (process.env.NODE_ENV !== 'production' && origin.match(/^http:\/\/localhost/)) {
+    // Allow localhost for development
+    if (origin === 'http://localhost:3001' ||
+        origin === 'http://localhost:3000' ||
+        origin.match(/^http:\/\/localhost/)) {
       return callback(null, true);
     }
     
+    // Log the origin for debugging
+    console.log('CORS blocked origin:', origin);
     callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
+  preflightContinue: false,
+  optionsSuccessStatus: 200
 }));
+
+// Handle preflight OPTIONS requests
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
+});
+
 app.use(express.json());
 
 // Test endpoint to verify server is running
 app.get('/test', (req, res) => {
+  // Set explicit CORS headers
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
   res.json({ message: 'ChatGPT Server is running!', timestamp: new Date().toISOString() });
 });
 
@@ -106,6 +126,10 @@ app.post('/chatgpt', async (req, res) => {
 
     const chatGPTResponse = response.data.choices[0].message.content;
     
+    // Set explicit CORS headers
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    
     res.json({
       response: chatGPTResponse,
       success: true
@@ -125,6 +149,10 @@ app.post('/chatgpt', async (req, res) => {
         errorMessage = `ChatGPT Fehler: ${error.response.data.error.message}`;
       }
     }
+    
+    // Set explicit CORS headers for error responses
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
     
     res.status(500).json({ 
       message: errorMessage,
