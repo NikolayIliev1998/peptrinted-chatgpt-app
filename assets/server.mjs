@@ -45,6 +45,18 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+// Root endpoint
+app.get('/', (req, res) => {
+  console.log('=== ROOT ENDPOINT HIT ===');
+  console.log('Root endpoint hit from origin:', req.headers.origin);
+  res.json({ 
+    message: 'ChatGPT Server is running!', 
+    timestamp: new Date().toISOString(),
+    origin: req.headers.origin,
+    corsHeaders: res.getHeaders()
+  });
+});
+
 // Test endpoint to verify server is running
 app.get('/test', (req, res) => {
   console.log('=== TEST ENDPOINT HIT ===');
