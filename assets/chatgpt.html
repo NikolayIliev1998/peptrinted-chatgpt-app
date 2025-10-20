@@ -313,6 +313,7 @@
         
         // Get selected language
         const selectedLanguage = document.getElementById('language-select').value;
+        console.log('Selected language:', selectedLanguage);
         
         // Send to ChatGPT API
         const response = await fetch(`${serverURL}/chatgpt`, {
