@@ -75,7 +75,7 @@ app.get('/test', (req, res) => {
 // ChatGPT endpoint
 app.post('/chatgpt', async (req, res) => {
   try {
-    const { message, ticketContext, orderContext } = req.body;
+    const { message, ticketContext, orderContext, language = 'de' } = req.body;
     
     if (!message) {
       return res.status(400).json({ message: 'Message is required' });
@@ -90,29 +90,130 @@ app.post('/chatgpt', async (req, res) => {
       });
     }
 
+    // Language-specific instructions
+    const languageInstructions = {
+      'de': 'Antworte immer höflich und professionell auf Deutsch',
+      'en-us': 'Always respond politely and professionally in American English',
+      'en-uk': 'Always respond politely and professionally in British English',
+      'it': 'Rispondi sempre in modo educato e professionale in italiano',
+      'es': 'Responde siempre de manera educada y profesional en español',
+      'fr': 'Répondez toujours de manière polie et professionnelle en français',
+      'nl': 'Antwoord altijd beleefd en professioneel in het Nederlands'
+    };
+
     // Build context for better prompts
     let systemPrompt = `Du bist ein hilfreicher Kundenservice-Assistent für PetPrinted, ein Unternehmen, das personalisierte Haustierprodukte verkauft. 
     
     Wichtige Informationen:
-    - Antworte immer höflich und professionell auf Deutsch
+    - ${languageInstructions[language] || languageInstructions['de']}
     - Sei hilfreich und lösungsorientiert
     - Wenn du keine Informationen hast, sage das ehrlich
     - Verwende eine freundliche, aber professionelle Tonart
     - Fokussiere dich auf Kundenservice und Problemlösung`;
 
+    // Language-specific context labels
+    const contextLabels = {
+      'de': {
+        ticket: 'Ticket-Kontext:',
+        order: 'Bestellungs-Kontext:',
+        subject: 'Betreff:',
+        description: 'Beschreibung:',
+        email: 'Kunden-E-Mail:',
+        orderNumber: 'Bestellnummer:',
+        customerName: 'Kundenname:',
+        orderStatus: 'Bestellstatus:',
+        totalPrice: 'Gesamtbetrag:',
+        notAvailable: 'Nicht verfügbar'
+      },
+      'en-us': {
+        ticket: 'Ticket Context:',
+        order: 'Order Context:',
+        subject: 'Subject:',
+        description: 'Description:',
+        email: 'Customer Email:',
+        orderNumber: 'Order Number:',
+        customerName: 'Customer Name:',
+        orderStatus: 'Order Status:',
+        totalPrice: 'Total Price:',
+        notAvailable: 'Not available'
+      },
+      'en-uk': {
+        ticket: 'Ticket Context:',
+        order: 'Order Context:',
+        subject: 'Subject:',
+        description: 'Description:',
+        email: 'Customer Email:',
+        orderNumber: 'Order Number:',
+        customerName: 'Customer Name:',
+        orderStatus: 'Order Status:',
+        totalPrice: 'Total Price:',
+        notAvailable: 'Not available'
+      },
+      'it': {
+        ticket: 'Contesto Ticket:',
+        order: 'Contesto Ordine:',
+        subject: 'Oggetto:',
+        description: 'Descrizione:',
+        email: 'Email Cliente:',
+        orderNumber: 'Numero Ordine:',
+        customerName: 'Nome Cliente:',
+        orderStatus: 'Stato Ordine:',
+        totalPrice: 'Prezzo Totale:',
+        notAvailable: 'Non disponibile'
+      },
+      'es': {
+        ticket: 'Contexto del Ticket:',
+        order: 'Contexto del Pedido:',
+        subject: 'Asunto:',
+        description: 'Descripción:',
+        email: 'Email del Cliente:',
+        orderNumber: 'Número de Pedido:',
+        customerName: 'Nombre del Cliente:',
+        orderStatus: 'Estado del Pedido:',
+        totalPrice: 'Precio Total:',
+        notAvailable: 'No disponible'
+      },
+      'fr': {
+        ticket: 'Contexte du Ticket:',
+        order: 'Contexte de la Commande:',
+        subject: 'Sujet:',
+        description: 'Description:',
+        email: 'Email du Client:',
+        orderNumber: 'Numéro de Commande:',
+        customerName: 'Nom du Client:',
+        orderStatus: 'Statut de la Commande:',
+        totalPrice: 'Prix Total:',
+        notAvailable: 'Non disponible'
+      },
+      'nl': {
+        ticket: 'Ticket Context:',
+        order: 'Bestelling Context:',
+        subject: 'Onderwerp:',
+        description: 'Beschrijving:',
+        email: 'Klant Email:',
+        orderNumber: 'Bestelnummer:',
+        customerName: 'Klantnaam:',
+        orderStatus: 'Bestelling Status:',
+        totalPrice: 'Totale Prijs:',
+        notAvailable: 'Niet beschikbaar'
+      }
+    };
+
+    const labels = contextLabels[language] || contextLabels['de'];
+
     if (ticketContext) {
-      systemPrompt += `\n\nTicket-Kontext:
-      - Betreff: ${ticketContext.subject || 'Nicht verfügbar'}
-      - Beschreibung: ${ticketContext.description || 'Nicht verfügbar'}
-      - Kunden-E-Mail: ${ticketContext.email || 'Nicht verfügbar'}`;
+      systemPrompt += `\n\n${labels.ticket}
+      - ${labels.subject} ${ticketContext.subject || labels.notAvailable}
+      - ${labels.description} ${ticketContext.description || labels.notAvailable}
+      - ${labels.email} ${ticketContext.email || labels.notAvailable}`;
     }
 
     if (orderContext) {
-      systemPrompt += `\n\nBestellungs-Kontext:
-      - Bestellnummer: ${orderContext.orderName || 'Nicht verfügbar'}
-      - Kundenname: ${orderContext.customerName || 'Nicht verfügbar'}
-      - Bestellstatus: ${orderContext.orderStatus || 'Nicht verfügbar'}
-      - Gesamtbetrag: ${orderContext.totalPrice || 'Nicht verfügbar'}`;
+      systemPrompt += `\n\n${labels.order}
+      - ${labels.orderNumber} ${orderContext.orderName || labels.notAvailable}
+      - ${labels.customerName} ${orderContext.customerName || labels.notAvailable}
+      - ${labels.orderStatus} ${orderContext.orderStatus || labels.notAvailable}
+      - ${labels.totalPrice} ${orderContext.totalPrice || labels.notAvailable}`;
     }
 
     const response = await axios.post('https://api.openai.com/v1/chat/completions', {
