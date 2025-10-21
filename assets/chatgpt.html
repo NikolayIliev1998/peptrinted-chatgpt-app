@@ -202,6 +202,207 @@
     .status-disconnected {
       color: #dc3545;
     }
+    
+    /* Custom Prompts Section */
+    .custom-prompts-section {
+      margin-bottom: 15px;
+    }
+    
+    .custom-prompts-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    
+    .custom-prompts-header strong {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .manage-prompts-btn {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+    
+    .manage-prompts-btn:hover {
+      background-color: #218838;
+    }
+    
+    .custom-prompts-container {
+      margin-bottom: 8px;
+    }
+    
+    .default-prompts {
+      margin-bottom: 0;
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+    }
+    
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      border-bottom: 1px solid #ddd;
+      background-color: #f8f9fa;
+      border-radius: 8px 8px 0 0;
+    }
+    
+    .modal-header h3 {
+      margin: 0;
+      font-size: 16px;
+      color: #2a9d8f;
+    }
+    
+    .close {
+      color: #aaa;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: #000;
+    }
+    
+    .modal-body {
+      padding: 20px;
+    }
+    
+    .add-prompt-section {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .add-prompt-section h4,
+    .existing-prompts-section h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .add-prompt-section input,
+    .add-prompt-section textarea {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 12px;
+      box-sizing: border-box;
+    }
+    
+    .add-prompt-section textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    
+    .add-prompt-btn {
+      background-color: #2a9d8f;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    
+    .add-prompt-btn:hover {
+      background-color: #21867a;
+    }
+    
+    .existing-prompts-section {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .prompt-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      border: 1px solid #e9ecef;
+    }
+    
+    .prompt-item-info {
+      flex: 1;
+    }
+    
+    .prompt-item-title {
+      font-weight: bold;
+      font-size: 12px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    
+    .prompt-item-text {
+      font-size: 11px;
+      color: #666;
+      line-height: 1.3;
+    }
+    
+    .prompt-item-actions {
+      display: flex;
+      gap: 5px;
+    }
+    
+    .prompt-use-btn,
+    .prompt-delete-btn {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 3px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    
+    .prompt-use-btn {
+      background-color: #007bff;
+      color: white;
+    }
+    
+    .prompt-use-btn:hover {
+      background-color: #0056b3;
+    }
+    
+    .prompt-delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+    
+    .prompt-delete-btn:hover {
+      background-color: #c82333;
+    }
   </style>
 </head>
 <body>
@@ -225,13 +426,23 @@
       </select>
     </div>
     
-    <div class="quick-prompts">
-      <strong>Schnelle Prompts:</strong>
-      <button class="quick-prompt" data-prompt="Hilf mir, eine professionelle Antwort auf diese Kundenanfrage zu formulieren.">Professionelle Antwort</button>
-      <button class="quick-prompt" data-prompt="Was könnte das Problem des Kunden sein und wie können wir es lösen?">Problem-Analyse</button>
-      <button class="quick-prompt" data-prompt="Erkläre dem Kunden höflich, warum es zu Verzögerungen kommen könnte.">Verzögerung erklären</button>
-      <button class="quick-prompt" data-prompt="Formuliere eine freundliche Entschuldigung für das Problem.">Entschuldigung</button>
-      <button class="quick-prompt" data-prompt="Wie können wir den Kunden am besten unterstützen?">Kundenunterstützung</button>
+    <div class="custom-prompts-section">
+      <div class="custom-prompts-header">
+        <strong>Schnelle Prompts:</strong>
+        <button id="manage-custom-prompts" class="manage-prompts-btn">+ Custom Prompt</button>
+      </div>
+      
+      <div id="custom-prompts-container" class="custom-prompts-container">
+        <!-- Custom prompts will be loaded here -->
+      </div>
+      
+      <div class="default-prompts">
+        <button class="quick-prompt" data-prompt="Hilf mir, eine professionelle Antwort auf diese Kundenanfrage zu formulieren.">Professionelle Antwort</button>
+        <button class="quick-prompt" data-prompt="Was könnte das Problem des Kunden sein und wie können wir es lösen?">Problem-Analyse</button>
+        <button class="quick-prompt" data-prompt="Erkläre dem Kunden höflich, warum es zu Verzögerungen kommen könnte.">Verzögerung erklären</button>
+        <button class="quick-prompt" data-prompt="Formuliere eine freundliche Entschuldigung für das Problem.">Entschuldigung</button>
+        <button class="quick-prompt" data-prompt="Wie können wir den Kunden am besten unterstützen?">Kundenunterstützung</button>
+      </div>
     </div>
     
     <div class="chatgpt-input">
@@ -248,6 +459,31 @@
     </div>
   </div>
 
+  <!-- Custom Prompts Modal -->
+  <div id="custom-prompts-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Custom Prompts verwalten</h3>
+        <span class="close">&times;</span>
+      </div>
+      <div class="modal-body">
+        <div class="add-prompt-section">
+          <h4>Neuen Prompt hinzufügen:</h4>
+          <input type="text" id="new-prompt-title" placeholder="Prompt Titel (z.B. 'Rückerstattung')" maxlength="30">
+          <textarea id="new-prompt-text" placeholder="Prompt Text (z.B. 'Hilf mir, eine professionelle Antwort für eine Rückerstattungsanfrage zu formulieren.')" rows="3"></textarea>
+          <button id="add-custom-prompt" class="add-prompt-btn">Prompt hinzufügen</button>
+        </div>
+        
+        <div class="existing-prompts-section">
+          <h4>Bestehende Custom Prompts:</h4>
+          <div id="existing-prompts-list">
+            <!-- Existing prompts will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
   <script>
     const localURL = "http://localhost:3001";
@@ -256,6 +492,117 @@
 
     const client = ZAFClient.init();
     let chatgptMessages = [];
+    let customPrompts = [];
+
+    // Custom Prompts Management
+    async function loadCustomPrompts() {
+      try {
+        const data = await client.get('app.customPrompts');
+        customPrompts = data['app.customPrompts'] || [];
+        renderCustomPrompts();
+      } catch (error) {
+        console.error('Error loading custom prompts:', error);
+        customPrompts = [];
+      }
+    }
+
+    async function saveCustomPrompts() {
+      try {
+        await client.set('app.customPrompts', customPrompts);
+      } catch (error) {
+        console.error('Error saving custom prompts:', error);
+      }
+    }
+
+    function renderCustomPrompts() {
+      const container = document.getElementById('custom-prompts-container');
+      container.innerHTML = '';
+      
+      customPrompts.forEach((prompt, index) => {
+        const promptButton = document.createElement('button');
+        promptButton.className = 'quick-prompt custom-prompt';
+        promptButton.textContent = prompt.title;
+        promptButton.setAttribute('data-prompt', prompt.text);
+        promptButton.setAttribute('data-custom-index', index);
+        container.appendChild(promptButton);
+      });
+    }
+
+    function renderExistingPrompts() {
+      const container = document.getElementById('existing-prompts-list');
+      container.innerHTML = '';
+      
+      if (customPrompts.length === 0) {
+        container.innerHTML = '<p style="color: #666; font-size: 12px; text-align: center; padding: 20px;">Keine Custom Prompts vorhanden</p>';
+        return;
+      }
+      
+      customPrompts.forEach((prompt, index) => {
+        const promptItem = document.createElement('div');
+        promptItem.className = 'prompt-item';
+        promptItem.innerHTML = `
+          <div class="prompt-item-info">
+            <div class="prompt-item-title">${prompt.title}</div>
+            <div class="prompt-item-text">${prompt.text}</div>
+          </div>
+          <div class="prompt-item-actions">
+            <button class="prompt-use-btn" onclick="useCustomPrompt(${index})">Verwenden</button>
+            <button class="prompt-delete-btn" onclick="deleteCustomPrompt(${index})">Löschen</button>
+          </div>
+        `;
+        container.appendChild(promptItem);
+      });
+    }
+
+    function addCustomPrompt() {
+      const title = document.getElementById('new-prompt-title').value.trim();
+      const text = document.getElementById('new-prompt-text').value.trim();
+      
+      if (!title || !text) {
+        alert('Bitte füllen Sie beide Felder aus.');
+        return;
+      }
+      
+      if (title.length > 30) {
+        alert('Der Titel darf maximal 30 Zeichen lang sein.');
+        return;
+      }
+      
+      const newPrompt = { title, text };
+      customPrompts.push(newPrompt);
+      
+      document.getElementById('new-prompt-title').value = '';
+      document.getElementById('new-prompt-text').value = '';
+      
+      saveCustomPrompts();
+      renderCustomPrompts();
+      renderExistingPrompts();
+    }
+
+    function useCustomPrompt(index) {
+      const prompt = customPrompts[index];
+      document.getElementById('chatgpt-prompt').value = prompt.text;
+      document.getElementById('chatgpt-prompt').focus();
+      closeModal();
+    }
+
+    function deleteCustomPrompt(index) {
+      if (confirm('Möchten Sie diesen Custom Prompt wirklich löschen?')) {
+        customPrompts.splice(index, 1);
+        saveCustomPrompts();
+        renderCustomPrompts();
+        renderExistingPrompts();
+      }
+    }
+
+    function openModal() {
+      document.getElementById('custom-prompts-modal').style.display = 'block';
+      renderExistingPrompts();
+    }
+
+    function closeModal() {
+      document.getElementById('custom-prompts-modal').style.display = 'none';
+    }
 
     // Check server connection
     async function checkServerConnection() {
@@ -360,17 +707,31 @@
       chatgptMessages = [];
     });
 
-    // Quick prompt buttons
-    document.querySelectorAll('.quick-prompt').forEach(button => {
-      button.addEventListener('click', () => {
-        const prompt = button.getAttribute('data-prompt');
+    // Quick prompt buttons (including custom prompts)
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('quick-prompt')) {
+        const prompt = e.target.getAttribute('data-prompt');
         document.getElementById('chatgpt-prompt').value = prompt;
         document.getElementById('chatgpt-prompt').focus();
-      });
+      }
+    });
+
+    // Custom Prompts Modal Event Listeners
+    document.getElementById('manage-custom-prompts').addEventListener('click', openModal);
+    document.getElementById('add-custom-prompt').addEventListener('click', addCustomPrompt);
+    document.querySelector('.close').addEventListener('click', closeModal);
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+      const modal = document.getElementById('custom-prompts-modal');
+      if (e.target === modal) {
+        closeModal();
+      }
     });
 
     // Initialize
     checkServerConnection();
+    loadCustomPrompts();
     
     // Add welcome message
     addChatGPTMessage('Hallo! Ich bin Ihr ChatGPT Assistant für PetPrinted. Wie kann ich Ihnen heute helfen?', 'assistant');
